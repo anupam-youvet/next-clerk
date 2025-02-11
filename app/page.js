@@ -1,7 +1,7 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import styles from "./page.module.css";
+import { SignIn } from "@clerk/nextjs";
 
 const styleObj = {
   border: "none",
@@ -15,11 +15,19 @@ const styleObj = {
 };
 export default function Home() {
   const router = useRouter();
-  useEffect(() => {
-    if (sessionStorage.getItem("email")) {
-      router.replace("/dashboard");
+  const [ui, setUI] = useState(null);
+
+  function getUI() {
+    if (ui === "signin") {
+      return <SignIn forceRedirectUrl="/dashboard" />;
+    } else {
+      return (
+        <button style={styleObj} onClick={() => setUI("signin")}>
+          Sign In with SSO
+        </button>
+      );
     }
-  }, []);
+  }
 
   return (
     <div
@@ -30,9 +38,7 @@ export default function Home() {
         height: "100vh",
       }}
     >
-      <button style={styleObj} onClick={() => router.replace("/sign-in")}>
-        Sign In with SSO
-      </button>
+      {getUI()}
     </div>
   );
 }

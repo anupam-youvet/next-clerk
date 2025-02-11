@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useUser } from "@clerk/nextjs";
 
 const styleObj = {
   border: "none",
@@ -16,18 +17,21 @@ const styleObj = {
 
 export default function Dashboard() {
   const router = useRouter();
+  const { user } = useUser();
   const [email, setEmail] = useState(null);
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const data = sessionStorage.getItem("email");
-      setEmail(data);
-      if (!data) {
-        router.replace("/");
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     const data = sessionStorage.getItem("email");
+  //     setEmail(data);
+  //     if (!data) {
+  //       router.replace("/");
+  //     }
+  //   }
+  // }, []);
 
-  return email ? (
+  console.log("user", user);
+
+  return (
     <div
       style={{
         display: "flex",
@@ -40,7 +44,7 @@ export default function Dashboard() {
         <button
           style={styleObj}
           onClick={() => {
-            sessionStorage.removeItem("email");
+            // sessionStorage.removeItem("email");
             router.replace("/");
           }}
         >
@@ -48,7 +52,5 @@ export default function Dashboard() {
         </button>
       </div>
     </div>
-  ) : (
-    ""
   );
 }
